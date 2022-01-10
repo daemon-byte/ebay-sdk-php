@@ -1,3 +1,9 @@
+# About this fork
+
+Works with Laravel 8 / PHP >=7.4
+
+# Original README
+
 This eBay SDK makes it easy for you to use [eBay API](https://developer.ebay.com/docs) in your PHP-based project.
 
 This repository is not a hobby or a side-project, but a code maintained by a for-profit company that uses it in production. We promise to keep it open-source and maintain it for as long as we operate.
