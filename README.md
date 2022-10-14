@@ -1,6 +1,6 @@
 # About this fork
 
-Works with Laravel 8 / PHP >=7.4
+Works with Laravel 9 / PHP >=8
 
 # Original README
 
