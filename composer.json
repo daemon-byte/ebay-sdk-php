@@ -1,8 +1,8 @@
 {
-    "name": "geekseller/ebay-sdk-php",
+    "name": "daemon-byte/ebay-sdk-php",
     "description": "An eBay SDK for PHP. Use the eBay API in your PHP projects.",
     "keywords": ["ebay", "api", "sdk"],
-    "homepage": "https://www.geekseller.com/",
+    "homepage": "https://github.com/daemon-byte/ebay-sdk-php",
     "type": "library",
     "license": "(Apache-2.0 and MIT)",
     "authors": [
@@ -10,16 +10,20 @@
             "name": "GeekSeller",
             "email": "support@geekseller.com",
             "homepage": "https://www.geekseller.com"
+        },
+        {
+            "name": "Daemon Byte",
+            "homepage": "https://github.com/daemon-byte/ebay-sdk-php"
         }
     ],
     "support": {
-        "issues": "https://github.com/geekseller/ebay-sdk-php/issues"
+        "issues": "https://github.com/daemon-byte/ebay-sdk-php/issues"
     },
     "require": {
-        "php": ">=5.5",
-        "guzzlehttp/guzzle": "~6.0",
-        "guzzlehttp/psr7": "~1.0",
-        "guzzlehttp/promises": "^1.1"
+        "php": ">=8",
+        "guzzlehttp/guzzle": "~7.2",
+        "guzzlehttp/psr7": "~2.4",
+        "guzzlehttp/promises": "^1.5"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
