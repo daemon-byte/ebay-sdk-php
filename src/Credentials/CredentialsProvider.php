@@ -94,9 +94,16 @@ class CredentialsProvider
     public static function env()
     {
         return function () {
-            $appId = getenv(self::ENV_APP_ID);
-            $certId = getenv(self::ENV_CERT_ID);
-            $devId = getenv(self::ENV_DEV_ID);
+            if( function_exists('env') ) {
+                $appId = env(self::ENV_APP_ID);
+                $certId = env(self::ENV_CERT_ID);
+                $devId = env(self::ENV_DEV_ID);
+            }
+            else {
+                $appId = getenv(self::ENV_APP_ID);
+                $certId = getenv(self::ENV_CERT_ID);
+                $devId = getenv(self::ENV_DEV_ID);
+            }
 
             if ($appId && $certId && $devId) {
                 return new Credentials($appId, $certId, $devId);
