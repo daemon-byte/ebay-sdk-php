@@ -1,4 +1,5 @@
 <?php
+
 namespace DTS\eBaySDK\Credentials;
 
 /**
@@ -8,8 +9,7 @@ namespace DTS\eBaySDK\Credentials;
  * must be returned. The function can supply a message via the returned exception
  * object to explain why no credentials are available.
  */
-class CredentialsProvider
-{
+class CredentialsProvider {
     const ENV_APP_ID = 'EBAY_SDK_APP_ID';
     const ENV_CERT_ID = 'EBAY_SDK_CERT_ID';
     const ENV_DEV_ID = 'EBAY_SDK_DEV_ID';
@@ -24,10 +24,10 @@ class CredentialsProvider
      *
      * @return callable
      */
-    public static function defaultProvider()
-    {
+    public static function defaultProvider() {
         return self::memoize(
             self::chain(
+                self::config(),
                 self::env(),
                 self::ini()
             )
@@ -41,8 +41,7 @@ class CredentialsProvider
      *
      * @return callable Wrapped provider that returns cached credentials when called.
      */
-    public static function memoize(callable $provider)
-    {
+    public static function memoize(callable $provider) {
         return function () use ($provider) {
             static $result;
             static $isConstant;
@@ -65,8 +64,7 @@ class CredentialsProvider
      * @return callable
      * @throws \InvalidArgumentException
      */
-    public static function chain()
-    {
+    public static function chain() {
         $providers = func_get_args();
         if (empty($providers)) {
             throw new \InvalidArgumentException('No providers in chain');
@@ -86,20 +84,45 @@ class CredentialsProvider
     }
 
     /**
+     * Provider that creates credentials from a configuation function like laravel
+     * EBAY_SDK_APP_ID, EBAY_SDK_CERT_ID, and EBAY_SDK_DEV_ID.
+     *
+     * @return callable
+     */
+    public static function config() {
+        return function () {
+            if (function_exists('config')) {
+                dd(config('ebaysdk.' . self::ENV_APP_ID));
+                $appId = config('ebaysdk.' . self::ENV_APP_ID);
+                $certId = config('ebaysdk.' . self::ENV_CERT_ID);
+                $devId = config('ebaysdk.' . self::ENV_DEV_ID);
+                if ($appId && $certId && $devId) {
+                    return new Credentials($appId, $certId, $devId);
+                }
+            }
+
+            return new \InvalidArgumentException(
+                'Could not find environment variable '
+                . 'credentials in ' . self::ENV_APP_ID . '/'
+                . self::ENV_CERT_ID . '/'
+                . self::ENV_DEV_ID
+            );
+        };
+    }
+
+    /**
      * Provider that creates credentials from environment variables
      * EBAY_SDK_APP_ID, EBAY_SDK_CERT_ID, and EBAY_SDK_DEV_ID.
      *
      * @return callable
      */
-    public static function env()
-    {
+    public static function env() {
         return function () {
-            if( function_exists('env') ) {
+            if (function_exists('env')) {
                 $appId = env(self::ENV_APP_ID);
                 $certId = env(self::ENV_CERT_ID);
                 $devId = env(self::ENV_DEV_ID);
-            }
-            else {
+            } else {
                 $appId = getenv(self::ENV_APP_ID);
                 $certId = getenv(self::ENV_CERT_ID);
                 $devId = getenv(self::ENV_DEV_ID);
@@ -110,7 +133,7 @@ class CredentialsProvider
             } else {
                 return new \InvalidArgumentException(
                     'Could not find environment variable '
-                    . 'credentials in '. self::ENV_APP_ID . '/'
+                    . 'credentials in ' . self::ENV_APP_ID . '/'
                     . self::ENV_CERT_ID . '/'
                     . self::ENV_DEV_ID
                 );
@@ -129,8 +152,7 @@ class CredentialsProvider
      * @return callable
      * @throws \InvalidArgumentException
      */
-    public static function ini($profile = null, $filename = null)
-    {
+    public static function ini($profile = null, $filename = null) {
         $filename = $filename ?: (self::getHomeDir() . '/.ebay_sdk/credentials');
         $profile = $profile ?: (getenv(self::ENV_PROFILE) ?: 'default');
 
@@ -164,8 +186,7 @@ class CredentialsProvider
      *
      * @return string|null
      */
-    private static function getHomeDir()
-    {
+    private static function getHomeDir() {
         // Linux/Unix-like systems.
         if ($homeDir = getenv('HOME')) {
             return $homeDir;
