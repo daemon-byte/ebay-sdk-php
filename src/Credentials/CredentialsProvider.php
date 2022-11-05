@@ -92,7 +92,6 @@ class CredentialsProvider {
     public static function config() {
         return function () {
             if (function_exists('config')) {
-                dd(config('ebaysdk.' . self::ENV_APP_ID));
                 $appId = config('ebaysdk.' . self::ENV_APP_ID);
                 $certId = config('ebaysdk.' . self::ENV_CERT_ID);
                 $devId = config('ebaysdk.' . self::ENV_DEV_ID);
